@@ -1,4 +1,5 @@
 import tkinter as tk
+import webbrowser
 from tkinter import Button, Grid, Scrollbar, filedialog, ttk
 from tkinter.messagebox import showerror, showinfo, showwarning
 
@@ -54,6 +55,16 @@ def process_tag(tag):
     # print(type(result))
     clear_text_screen()
     change_textBox_content(result)
+
+
+def OpenUrl(help_url):
+    """This will open the help url in the web browser"""
+    webbrowser.open_new(help_url)
+
+
+def change_text_wrap_type(wrap_type):
+    """This will change the wrap type i.e., char, word, none"""
+    textBox.configure(wrap=wrap_type)
 
 
 def create_input_frame(container):
@@ -144,6 +155,38 @@ def create_input_frame(container):
     for widget in frame.winfo_children():
         widget.grid(padx=0, pady=20)
 
+    # create a menubar
+    menubar = tk.Menu(container)
+    container.config(menu=menubar)
+
+    # create a option menu
+    option_menu = tk.Menu(container, tearoff=False)
+
+    # create help menu
+    help_menu = tk.Menu(container, tearoff=False)
+    help_url = "https://github.com/vaibhav135/python-web-scrapping-tool"
+    help_menu.add_command(label="help", command=lambda: OpenUrl(help_url))
+    help_menu.add_command(label="quit", command=container.destroy)
+
+    # add wrap submenu like wrap = "char"|"word"|"none"
+    wrap_sub_menu = tk.Menu(option_menu, tearoff=False)
+    wrap_sub_menu.add_command(
+        label="char", command=lambda: change_text_wrap_type("char")
+    )
+    wrap_sub_menu.add_command(
+        label="word", command=lambda: change_text_wrap_type("word")
+    )
+    wrap_sub_menu.add_command(
+        label="none", command=lambda: change_text_wrap_type("none")
+    )
+
+    # add a menu item to the menu
+    option_menu.add_cascade(label="wrap", menu=wrap_sub_menu)
+
+    # add the File menu to the menubar
+    menubar.add_cascade(label="options", menu=option_menu)
+    menubar.add_cascade(label="help", menu=help_menu)
+
     return frame
 
 
@@ -223,7 +266,7 @@ def create_output_frame(container):
     textBox = tk.Text(frame)
     textBox.grid(column=1, row=0, sticky="nsew", columnspan=5)
     yscrollbar = Scrollbar(frame, orient="vertical", command=textBox.yview)
-    xscrollbar = Scrollbar(frame, orient="horizontal", command=textBox.yview)
+    xscrollbar = Scrollbar(frame, orient="horizontal", command=textBox.xview)
     yscrollbar.grid(column=6, row=0, sticky="ns")
     xscrollbar.grid(column=1, row=0, columnspan=6, sticky="sew")
     textBox["yscrollcommand"] = yscrollbar.set
@@ -261,8 +304,18 @@ def create_main_window():
     root.title("Web-Scrapper GUI")
     root.geometry("1366x1080+50+50")
 
+    # # create a menubar
+    # menubar = tk.Menu(root)
+    # root.config(menu=menubar)
+    # # create a file menu
+    # option_menu = tk.Menu(root, tearoff=False)
+    # # add a menu item to the menu
+    # option_menu.add_command(label="Exit", command=root.destroy)
+    # # add the File menu to the menubar
+    # menubar.add_cascade(label="options", menu=option_menu)
+
     root.grid_columnconfigure(0, weight=1)
-    # root.grid_columnconfigure(1, weight=1)
+    root.grid_columnconfigure(1, weight=1)
     root.grid_rowconfigure(0, weight=1)
 
     input_frame = create_input_frame(root)
