@@ -33,44 +33,81 @@ def process_url_input():
             return html
 
 
+def process_class_or_id(opt, inp, res):
+    new_res = ""
+    if opt == "class":
+        new_res = res.find_all(class_=inp)
+    else:
+        new_res = res.find_all(id=inp)
+    if len(new_res) == 0:
+        print("sorry couldn't find anything")
+        return ""
+    print("the result: ", new_res)
+    return new_res
+
+
+def input_class_or_id(opt, res):
+    stop = False
+    while not stop:
+        inp = input("enter the class or id")
+        new_res = process_class_or_id(opt, inp, res)
+        ask = input("press any key to continue and q to quit")
+        if ask == "q":
+            return new_res
+
+
 def process_tags(tag, res):
     """process the tag input and update the result"""
     print("current tag: ", tag)
+    res = res.tag
+    if len(res) == 0:
+        print("sorry couldn't find anything")
+        return ""
+    else:
+        print("the result: ", res)
+        return res
 
 
-def show_options():
-    """showing menu options"""
-    pre_statement = "press one of the key given below: "
-    options = {
-        "s": "show menu again",
-        "sw": "show web-scrapping options",
-        "p": "print the html result",
-        "c": "clear the screen",
-        "q": "quit",
-    }
-    print(Back.LIGHTGREEN_EX + Fore.BLACK + "\n{}".format(pre_statement))
-    for key, value in options.items():
-        print(Fore.GREEN + "{}: {}".format(key, value))
-
-
-def start_web_scrapping(res):
-    """webscrapping"""
+def input_tags(res):
+    """get the tags"""
     stop = False
     while not stop:
         attr = input(Fore.LIGHTBLUE_EX + "\nenter any tag which you want to look for: ")
         res = check_html_tags.check_tag(attr)
         if res:
-            process_tags(attr, res)
+            new_res = process_tags(attr, res)
+            ask = input("press any key to continue and q to quit")
+            if ask == "q":
+                return new_res
         else:
             print(Fore.RED + "sorry the tag is invalid\n")
 
-        inp = input(
+
+def start_web_scrapping(res):
+    """webscrapping: gives you options to search by tags or by id/class"""
+    stop = False
+    while not stop:
+        web_scrapping_options = {
+            "t": "for selecting tags",
+            "class": "look for class",
+            "id": "look for the id",
+        }
+        for key, value in web_scrapping_options.items():
+            print("web scrapping options: \n \t {}: {}".format(key, value))
+        inp = input()
+        new_res = ""
+        if inp == "t":
+            new_res = input_tags(res)
+        elif inp == "class" or inp == "id":
+            new_res = input_class_or_id(inp, res)
+
+        next_inp = input(
             Fore.LIGHTCYAN_EX
             + "====> press any key if you want to\
  continue OR press q to quit:"
         )
-        if inp == "q":
-            break
+        if next_inp == "q":
+            return new_res
 
 
 def print_result(res):
@@ -96,6 +133,21 @@ def process_selected_options(selected_opt, res):
         clear_screen()
     elif selected_opt == "sw":
         start_web_scrapping(res)
+
+
+def show_options():
+    """showing menu options"""
+    pre_statement = "press one of the key given below: "
+    options = {
+        "s": "show menu again",
+        "sw": "show web-scrapping options",
+        "p": "print the html result",
+        "c": "clear the screen",
+        "q": "quit",
+    }
+    print(Back.LIGHTGREEN_EX + Fore.BLACK + "\n{}".format(pre_statement))
+    for key, value in options.items():
+        print(Fore.GREEN + "{}: {}".format(key, value))
 
 
 def process_list():

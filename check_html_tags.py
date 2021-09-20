@@ -6,12 +6,18 @@ def all_html_tags():
     # print(read_data)
 
 
-def check_tag(attr):
-    """checks the tags and tells if the tags is valid"""
+def default_tag_conversion(attr):
+    """this removes the angled bracets and slash"""
+    """<hr> => hr || </hr> => hr"""
     len_attr = len(attr)
     start_tag = attr.find("<") + attr.find("/") + (attr.find(">") - (len_attr - 1)) + 1
     end_tag = attr.find("<") + (attr.find("/") - 1) + (attr.find(">") - (len_attr - 1))
+    return (start_tag, end_tag)
 
+
+def check_tag(attr):
+    """checks the tags and tells if the tags is valid"""
+    start_tag, end_tag = default_tag_conversion(attr)
     if (attr.find("<") + attr.find("/") + attr.find(">")) == -3:
         pass
     else:
