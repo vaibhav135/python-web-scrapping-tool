@@ -2,6 +2,7 @@
 A simple web-scrapping-GUI tool made with python
 
 ## Demo
+
 **Main UI**
 ![image](https://user-images.githubusercontent.com/39329182/134151224-eca3f258-d666-4443-8b96-e652eeb8adad.png)
 
