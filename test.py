@@ -18,6 +18,8 @@ def play_with_tags(soup):
     # finds all the occurences of li
     # for line in soup.find_all("li"):
     # print(line.get_text())
+    res = soup
+    print("copy soup", type(res))
     multiple_tags = input("enter multiple tags separated with comma: ")
     multiple_tags = multiple_tags.split(",")
 
@@ -26,45 +28,51 @@ def play_with_tags(soup):
     # print(some_list)
 
     res = soup.find_all(some_list)
-    some_new_text = ""
-    for some in res:
-        some_new_text += some.text + "\n"
+    print("The length of all what we found", len(res))
+    # print(res[0].text)
+    # for res_index, res_value in enumerate(res):
+    # print("index: {} \n value: {}\n".format(res_index, res_value.text))
+    # some_new_text = ""
+    # for some in res:
+    # some_new_text += some.text + "\n"
 
-    print(some_new_text)
+    # print(some_new_text)
 
     # for m_tags in multiple_tags:
     # multiple_tags.replace(m_tags, m_tags.strip())
     # print(
 
-    search = soup.footer
-    relative_search = search.contents
-    continuation_search = search.find_all("ul")
+    # search = soup.footer
+    # relative_search = search.contents
+    # continuation_search = search.find_all("ul")
 
-    if type(continuation_search) == bs4.element.ResultSet:
-        print("yup dats true tho\n")
-    else:
-        print("that's false boiii\n")
+    # if type(continuation_search) == bs4.element.ResultSet:
+    # print("yup dats true tho\n")
+    # else:
+    # print("that's false boiii\n")
 
-    # print(continuation_search)
-    print(
-        "soup type: {},   search type: {},  continuation_search type: {},\
- relative_search type: {}".format(
-            type(soup), type(search), type(continuation_search), type(relative_search)
-        )
-    )
-    some_str = "hello"
-    if type(some_str) == str:
-        print("thats wussup")
-    print(len(relative_search))
-    # print("\n\n", relative_search[1].get_text())
+    # # print(continuation_search)
+    # print(
+    # "soup type: {},   search type: {},  continuation_search type: {},\
 
-    # print(search.get_text())
 
-    # for string in continuation_search.stripped_strings:
-    # print(repr(string))
+# relative_search type: {}".format(
+# type(soup), type(search), type(continuation_search), type(relative_search)
+# )
+# )
+# some_str = "hello"
+# if type(some_str) == str:
+# print("thats wussup")
+# print(len(relative_search))
+# print("\n\n", relative_search[1].get_text())
 
-    # print(soup)
-    # print(soup.get_text())
+# print(search.get_text())
+
+# for string in continuation_search.stripped_strings:
+# print(repr(string))
+
+# print(soup)
+# print(soup.get_text())
 
 
 def test_func():
@@ -85,6 +93,7 @@ def test_func():
         html = html_bytes.decode("utf-8")
         result = html
     soup = BeautifulSoup(result, "html.parser")
+    print("main soup: ", type(soup))
     play_with_tags(soup)
 
 

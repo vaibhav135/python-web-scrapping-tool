@@ -1,12 +1,14 @@
 import tkinter as tk
 import webbrowser
-from tkinter import Button, Grid, Scrollbar, filedialog, ttk
-from tkinter.messagebox import showerror, showinfo, showwarning
+from tkinter import Button, Scrollbar, filedialog, ttk
+from tkinter.messagebox import showwarning
 
 from bs4 import BeautifulSoup
 
 import check_html_tags
 import process_url
+
+traverse_count = 0
 
 
 def clear_text_screen():
@@ -40,10 +42,12 @@ def formatted_tags(tags):
 
 
 def process_tag(tag):
-    # tag_res : if the tag is valid or not result in boolean
+    """Checks if the tag is valid or not. If valid then show it to the textBox"""
     tag_list = tag.split(",")
+    global formatted_tag_list
     formatted_tag_list = [formatted_tags(m_tags) for m_tags in tag_list]
     for s_tag in formatted_tag_list:
+        # tag_res : if the tag is valid or not result in boolean
         tag_res = check_html_tags.check_tag(s_tag)
         if not tag_res:
             showwarning(
@@ -52,9 +56,50 @@ def process_tag(tag):
             return
 
     result = soup.find_all(formatted_tag_list)
-    # print(type(result))
+    print(type(result))
     clear_text_screen()
     change_textBox_content(result)
+
+
+def check_for_tags():
+    if len(formatted_tag_list) == 0:
+        return False
+    return True
+
+
+def process_next_btn():
+    if not check_for_tags():
+        showwarning(title="no tags found", message="please enter tags first")
+        return
+
+    global traverse_count, result
+    print(traverse_count)
+    clear_text_screen()
+    temp_res = soup.find_all(formatted_tag_list)
+    result = temp_res[traverse_count]
+    change_textBox_content(result)
+
+    if traverse_count >= len(temp_res) - 1:
+        traverse_count = 0
+    else:
+        traverse_count += 1
+
+
+def process_prev_btn():
+    if not check_for_tags():
+        showwarning(title="no tags found", message="please enter tags first")
+        return
+    global traverse_count, result
+    print(traverse_count)
+    clear_text_screen()
+    temp_res = soup.find_all(formatted_tag_list)
+    result = temp_res[traverse_count]
+    change_textBox_content(result)
+
+    if traverse_count <= 0:
+        traverse_count = len(temp_res) - 1
+    else:
+        traverse_count -= 1
 
 
 def OpenUrl(help_url):
@@ -83,7 +128,8 @@ def create_input_frame(container):
     frame.grid_rowconfigure(3, weight=1)
     frame.grid_rowconfigure(4, weight=1)
     frame.grid_rowconfigure(5, weight=1)
-    frame.grid_rowconfigure(6, weight=8)
+    frame.grid_rowconfigure(6, weight=1)
+    frame.grid_rowconfigure(7, weight=7)
 
     # for getting the info about the width of the column
 
@@ -151,6 +197,23 @@ def create_input_frame(container):
         command=lambda: process_tag(tags_entry.get()),
     )
     tag_submit_button.grid(column=1, row=5)
+
+    # create a next and previous button to traverse the code and the text
+    next_button = Button(
+        frame,
+        width=15,
+        text="go to next",
+        command=process_next_btn,
+    )
+    next_button.grid(row=6, column=2, sticky="w")
+
+    prev_button = Button(
+        frame,
+        width=15,
+        text="go to prev",
+        command=process_prev_btn,
+    )
+    prev_button.grid(row=6, column=1, sticky="w")
 
     for widget in frame.winfo_children():
         widget.grid(padx=0, pady=20)
@@ -232,11 +295,12 @@ def remove_empty_lines():
 # extracting text from the html result
 def get_text():
     global raw_text
-    raw_text = soup.get_text()
-    result = raw_text
+    # print(type(result))
+    # print(type(soup))
+    raw_text = result.get_text()
     # print(type(result))
     clear_text_screen()
-    change_textBox_content(result)
+    change_textBox_content(raw_text)
 
 
 # reverting the text back to code
@@ -332,6 +396,7 @@ def create_main_window():
 result = ""
 soup = ""
 raw_text = ""
+formatted_tag_list = []
 
 if __name__ == "__main__":
     create_main_window()
