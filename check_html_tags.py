@@ -3,7 +3,6 @@ def all_html_tags():
     with open("html_tags_list.txt") as f:
         read_data = f.read()
     return read_data.splitlines(True)
-    # print(read_data)
 
 
 def default_tag_conversion(attr):
@@ -31,11 +30,8 @@ def check_tag(attr):
     gets_tags_list = all_html_tags()
     for value in gets_tags_list:
         value = value.split("\n")[0]
-        # print("attr: {}  value: {} length: {}".format(attr, value, len(value)))
         if attr == value:
             return True
     return False
 
 
-# if __name__ == "__main__":
-# check_tag()

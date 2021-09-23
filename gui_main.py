@@ -116,10 +116,11 @@ def create_input_frame(container):
     s = ttk.Style()
     s.configure("Danger.TFrame", borderwidth=2, relief="sunken")
     frame = ttk.Frame(container, style="Danger.TFrame")
+    
+    # grid column configuration
     frame.grid_columnconfigure(0, weight=1)
     frame.grid_columnconfigure(1, weight=1)
     frame.grid_columnconfigure(2, weight=1)
-    # frame.grid_columnconfigure(2, weight=1)
 
     # grid row configuration
     frame.grid_rowconfigure(0, weight=2)
@@ -132,16 +133,15 @@ def create_input_frame(container):
     frame.grid_rowconfigure(7, weight=7)
 
     # for getting the info about the width of the column
-
-    # ttk.Separator(frame, orient="vertical").grid(
-    # column=0, row=0, rowspan=17, sticky="nse"
-    # )
-    # ttk.Separator(frame, orient="vertical").grid(
-    # column=1, row=0, rowspan=17, sticky="nse"
-    # )
-    # ttk.Separator(frame, orient="vertical").grid(
-    # column=2, row=0, rowspan=17, sticky="nse"
-    # )
+        # ttk.Separator(frame, orient="vertical").grid(
+        # column=0, row=0, rowspan=17, sticky="nse"
+        # )
+        # ttk.Separator(frame, orient="vertical").grid(
+        # column=1, row=0, rowspan=17, sticky="nse"
+        # )
+        # ttk.Separator(frame, orient="vertical").grid(
+        # column=2, row=0, rowspan=17, sticky="nse"
+        # )
 
     # label instructing to enter input
     ttk.Label(frame, text="Enter input's here", font=("sans", 14)).grid(
@@ -276,12 +276,10 @@ def remove_empty_lines():
     for index, line in enumerate(formatted_lines):
         if line == " " or line == "":
             count += 1
-            # print("add: ", index, "count: ", count, "line: ", line)
             if count > 2:
                 formatted_lines[index] = "-"
         else:
             count = 0
-            # print("zero: ", index)
 
     final_line = [line for line in formatted_lines if line != "-"]
     new_result = ""
@@ -295,10 +293,7 @@ def remove_empty_lines():
 # extracting text from the html result
 def get_text():
     global raw_text
-    # print(type(result))
-    # print(type(soup))
     raw_text = result.get_text()
-    # print(type(result))
     clear_text_screen()
     change_textBox_content(raw_text)
 
@@ -368,16 +363,6 @@ def create_main_window():
     root.title("Web-Scrapper GUI")
     root.geometry("1366x1080+50+50")
 
-    # # create a menubar
-    # menubar = tk.Menu(root)
-    # root.config(menu=menubar)
-    # # create a file menu
-    # option_menu = tk.Menu(root, tearoff=False)
-    # # add a menu item to the menu
-    # option_menu.add_command(label="Exit", command=root.destroy)
-    # # add the File menu to the menubar
-    # menubar.add_cascade(label="options", menu=option_menu)
-
     root.grid_columnconfigure(0, weight=1)
     root.grid_columnconfigure(1, weight=1)
     root.grid_rowconfigure(0, weight=1)
@@ -385,7 +370,6 @@ def create_main_window():
     input_frame = create_input_frame(root)
     input_frame.grid(column=0, row=0, sticky="nsew", padx=2, pady=2)
 
-    # separator.pack(fill="x")
 
     output_frame = create_output_frame(root)
     output_frame.grid(column=1, row=0, columnspan=2, sticky="nsew", pady=2, padx=2)
